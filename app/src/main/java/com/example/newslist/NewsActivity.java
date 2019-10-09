@@ -9,6 +9,8 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -119,11 +121,22 @@ public class NewsActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<News> result) {
+        protected void onPostExecute(final ArrayList<News> result) {
 
             newsList= result;
             Log.d("News", newsList.toString());
             NewsAdapter adapter = new NewsAdapter(NewsActivity.this, R.layout.news_display, newsList);
+            newsDisplay.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    News n = result.get(position);
+
+                    Intent i = new Intent(NewsActivity.this, WebViewURL.class);
+
+                    i.putExtra("URL", n.url);
+                    startActivity(i);
+                }
+            });
 
             newsDisplay.setAdapter(adapter);
 
