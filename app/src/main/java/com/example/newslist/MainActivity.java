@@ -3,11 +3,14 @@ package com.example.newslist;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<Source> source_list = null;
+    Source source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,12 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONObject sourceJson = sources.getJSONObject(i);
 
-                        Source source = new Source();
-                        //source.id=sourceJson.getString("id");
+                        source = new Source();
+                        source.id=sourceJson.getString("id");
                         source.name=sourceJson.getString("name");
                         result.add(source);
-
-
 
                     }
                 }
@@ -104,13 +106,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<Source> result) {
+        protected void onPostExecute(final ArrayList<Source> result) {
 
             if(result.size()>0)
             {
                 source_list=result;
                 ArrayAdapter arrayAdapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_list_item_1,source_list);
                 listView.setAdapter(arrayAdapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Source s = result.get(position);
+                        Intent intent = new Intent(MainActivity.this, NewsActivity.class);
+                        /*Bundle bundle = new Bundle();
+                        bundle.putString("ID",source_list.get(0).id.toString());
+                        intent.putExtras(bundle);*/
+                        intent.putExtra("ids", s.id);
+
+                        startActivity(intent);
+                    }
+                });
 
             }
             else
