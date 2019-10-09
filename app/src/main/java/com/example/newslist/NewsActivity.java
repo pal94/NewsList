@@ -86,7 +86,7 @@ public class NewsActivity extends AppCompatActivity {
                     String json = IOUtils.toString(connection.getInputStream(), "UTF8");
 
                     JSONObject root = new JSONObject(json);
-                    JSONArray sources = root.getJSONArray("news");
+                    JSONArray sources = root.getJSONArray("articles");
 
                     for (int i=0;i<sources.length();i++) {
 
@@ -99,7 +99,7 @@ public class NewsActivity extends AppCompatActivity {
                         news.publishedAt=newsJson.getString("publishedAt");
                         news.url=newsJson.getString("url");
                         news.urlToImage=newsJson.getString("urlToImage");
-                        news.source=source;
+                        //news.source=source;
                         result.add(news);
 
                     }
@@ -122,6 +122,7 @@ public class NewsActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<News> result) {
 
             newsList= result;
+            Log.d("News", newsList.toString());
             NewsAdapter adapter = new NewsAdapter(NewsActivity.this, R.layout.news_display, newsList);
 
             newsDisplay.setAdapter(adapter);
