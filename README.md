@@ -10,3 +10,7 @@ Java
 Android Studio 3.5
 API Level 28
 
+**API**
+----
+This project uses https://newsapi.org/ for extracting the sources.
+
